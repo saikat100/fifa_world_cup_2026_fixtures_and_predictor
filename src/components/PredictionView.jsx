@@ -5,6 +5,7 @@ import GroupStagePredictor from "./GroupStagePredictor";
 import BracketView from "./BracketView";
 import winGif from "../assets/win.gif";
 import trophyImg from "../assets/worldCup.png";
+import championHistory from "../data/championHistory.json";
 import "./Prediction.css";
 
 const PredictionView = () => {
@@ -22,8 +23,30 @@ const PredictionView = () => {
     }
     if (predictions.final) {
       setShowChampionModal(true);
+
+      // Update the Excel file via our custom Vite middleware
+      fetch("/api/update-champion", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ team: predictions.final }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.success) {
+            console.log("Champion count updated:", data.newCount);
+          }
+        })
+        .catch((err) => console.error("Failed to update champion count:", err));
     }
   }, [predictions.final]);
+
+  const getChampionWins = (teamName) => {
+    const history = championHistory.find(
+      (item) => item["Team Name"] === teamName
+    );
+    const existingWins = history ? history["Number of win"] : 0;
+    return existingWins + 1;
+  };
 
   const stages = [
     "Group Stage",
@@ -201,6 +224,9 @@ const PredictionView = () => {
           >
             <h2 className="champion-title">🏆 Champion!</h2>
             <div className="champion-team">{predictions.final}</div>
+            <div className="champion-wins">
+              Number of wins: {getChampionWins(predictions.final)}
+            </div>
             <div className="champion-media">
               <img src={winGif} alt="Celebration" className="champion-gif" />
               {/* <img
