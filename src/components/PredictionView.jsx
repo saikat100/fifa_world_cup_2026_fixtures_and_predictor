@@ -15,6 +15,7 @@ const PredictionView = () => {
     "Round of 16",
     "Quarterfinals",
     "Semifinals",
+    "Third Place",
     "Final",
   ];
 
@@ -50,6 +51,9 @@ const PredictionView = () => {
         // Check if both matches have winners
         const sfMatches = [101, 102];
         return sfMatches.every((matchNo) => predictions.semifinals?.[matchNo]);
+
+      case "Third Place":
+        return !!predictions.thirdPlace;
 
       case "Final":
         return !!predictions.final;

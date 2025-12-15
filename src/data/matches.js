@@ -1135,7 +1135,7 @@ export const matches = [
   {
     Stage: "Final",
     DateTimeEDT: "2026-07-19 15:00",
-    Team1: "W191",
+    Team1: "W101",
     Team2: "W102",
     MatchNo: 104,
     Location: "MetLife Stadium, East Rutherford",
