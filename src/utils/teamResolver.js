@@ -13,7 +13,6 @@ const THIRD_PLACE_POSITIONS = {
   "3DEIJL": 7, // 8th best 3rd place team
 };
 
-// Resolve team name from group position code (e.g., "1A" -> actual team from Group A 1st place)
 export const resolveTeamFromGroupCode = (
   teamCode,
   groupPredictions,

@@ -51,7 +51,6 @@ export const resolveRoundOf32Team = (teamCode, groupPredictions) => {
 
   // Handle group position codes like "1A", "2B", "3ABCD"
   if (teamCode.match(/^\d[A-L]$/)) {
-    // Single group position (e.g., "1A" = Group A first place)
     const position = teamCode[0];
     const group = teamCode[1];
 
