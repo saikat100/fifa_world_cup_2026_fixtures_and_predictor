@@ -1,0 +1,159 @@
+.app-container {
+  width: 100%;
+}
+
+.view-tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding: 0 24px;
+  padding-top: 24px;
+}
+
+.view-tab {
+  background: var(--glass);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  color: var(--muted);
+  padding: 12px 24px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.view-tab:hover {
+  border-color: var(--accent);
+  color: #e6eef6;
+}
+
+.view-tab.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #0f172a;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+h1 {
+  font-size: 20px;
+  margin: 0;
+}
+
+.controls {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.select,
+.input,
+.btn {
+  background: var(--glass);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  padding: 8px 10px;
+  border-radius: 10px;
+  color: var(--muted);
+}
+
+.input {
+  min-width: 200px;
+}
+
+.btn {
+  cursor: pointer;
+  color: #e6eef6;
+}
+
+.table-wrap {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+  padding: 12px;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(2, 6, 23, 0.6);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+th,
+td {
+  padding: 10px 8px;
+  text-align: left;
+  font-size: 13px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+th {
+  position: sticky;
+  top: 0;
+  background: rgba(6, 8, 16, 0.6);
+  backdrop-filter: blur(4px);
+  cursor: pointer;
+}
+
+th.sort-asc::after {
+  content: " ▲";
+  font-size: 11px;
+  color: var(--accent);
+}
+
+th.sort-desc::after {
+  content: " ▼";
+  font-size: 11px;
+  color: var(--accent);
+}
+
+.small {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.team-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.flag-icon {
+  width: 20px;
+  height: 15px;
+  object-fit: cover;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 800px) {
+  th,
+  td {
+    font-size: 12px;
+    padding: 8px;
+  }
+  .input {
+    min-width: 120px;
+  }
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

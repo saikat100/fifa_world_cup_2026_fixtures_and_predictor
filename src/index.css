@@ -1,0 +1,15 @@
+:root {
+  --bg: #0f172a;
+  --card: #0b1220;
+  --muted: #94a3b8;
+  --accent: #06b6d4;
+  --glass: rgba(255, 255, 255, 0.03);
+  font-family: Inter, system-ui, Segoe UI, Roboto, 'Helvetica Neue', Arial;
+}
+
+body {
+  margin: 0;
+  background: linear-gradient(180deg, #071127 0%, #08111b 100%);
+  color: #e6eef6;
+  padding: 24px;
+}
