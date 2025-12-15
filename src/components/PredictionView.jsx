@@ -1,14 +1,29 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { usePredictions } from "../context/PredictionContext";
 import { areGroupPredictionsComplete } from "../utils/bracketLogic";
 import GroupStagePredictor from "./GroupStagePredictor";
 import BracketView from "./BracketView";
+import winGif from "../assets/win.gif";
+import trophyImg from "../assets/worldCup.png";
 import "./Prediction.css";
 
 const PredictionView = () => {
   const [currentStage, setCurrentStage] = useState("Group Stage");
   const [showResetConfirm, setShowResetConfirm] = useState(false);
+  const [showChampionModal, setShowChampionModal] = useState(false);
+  const isFirstMount = useRef(true);
   const { predictions, resetPredictions } = usePredictions();
+
+  // Watch for champion selection
+  useEffect(() => {
+    if (isFirstMount.current) {
+      isFirstMount.current = false;
+      return;
+    }
+    if (predictions.final) {
+      setShowChampionModal(true);
+    }
+  }, [predictions.final]);
 
   const stages = [
     "Group Stage",
@@ -135,9 +150,9 @@ const PredictionView = () => {
               {complete && <span className="check-icon">✓ </span>}
               {!unlocked && <span className="lock-icon">🔒 </span>}
               {stage === "Final" && complete && predictions.final
-                ? `🏆 Final ${predictions.final}`
+                ? `🏆 Champion (${predictions.final})`
                 : stage === "Third Place" && complete && predictions.thirdPlace
-                ? `🥈 Third Place ${predictions.thirdPlace}`
+                ? `🥈 Third Place (${predictions.thirdPlace})`
                 : stage}
             </button>
           );
@@ -169,6 +184,38 @@ const PredictionView = () => {
                 Reset All
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Championship Modal */}
+      {showChampionModal && predictions.final && (
+        <div
+          className="modal-overlay"
+          onClick={() => setShowChampionModal(false)}
+        >
+          <div
+            className="modal-content champion-modal"
+            onClick={(e) => e.stopPropagation()}
+            style={{ textAlign: "center", padding: "32px", maxWidth: "500px" }}
+          >
+            <h2 className="champion-title">🏆 Champion!</h2>
+            <div className="champion-team">{predictions.final}</div>
+            <div className="champion-media">
+              <img src={winGif} alt="Celebration" className="champion-gif" />
+              {/* <img
+                src={trophyImg}
+                alt="World Cup Trophy"
+                className="champion-trophy"
+              /> */}
+            </div>
+            <button
+              className="modal-btn confirm-btn"
+              onClick={() => setShowChampionModal(false)}
+              style={{ marginTop: "24px", width: "100%" }}
+            >
+              Celebrate!
+            </button>
           </div>
         </div>
       )}
