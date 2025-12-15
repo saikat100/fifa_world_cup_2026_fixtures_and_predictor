@@ -5,12 +5,54 @@ import { getFlagUrl } from "../utils/flags";
 import "./Prediction.css";
 
 const GroupStagePredictor = () => {
-  const { predictions, updateGroupPrediction, updateThirdPlaceQualifiers } =
-    usePredictions();
+  const {
+    predictions,
+    updateGroupPrediction,
+    swapGroupPositions,
+    updateThirdPlaceQualifiers,
+  } = usePredictions();
   const groups = getAllGroups();
 
   const handleTeamSelect = (group, position, team) => {
     updateGroupPrediction(group, position, team);
+
+    // Auto-select the last team if 3 teams are selected
+    if (team) {
+      const currentGroup = predictions.groupStage[group] || {};
+      // Simulate the new state
+      const nextGroup = { ...currentGroup, [position]: team };
+
+      const positions = ["first", "second", "third", "fourth"];
+      const filledCount = positions.filter((pos) => nextGroup[pos]).length;
+
+      if (filledCount === 3) {
+        const teams = getGroupTeams(group);
+        const selectedTeams = Object.values(nextGroup).filter(Boolean);
+        const remainingTeam = teams.find((t) => !selectedTeams.includes(t));
+        const remainingPosition = positions.find((pos) => !nextGroup[pos]);
+
+        if (remainingTeam && remainingPosition) {
+          updateGroupPrediction(group, remainingPosition, remainingTeam);
+        }
+      }
+    }
+  };
+
+  const POSITIONS = [
+    { key: "first", label: "1st Place" },
+    { key: "second", label: "2nd Place" },
+    { key: "third", label: "3rd Place" },
+    { key: "fourth", label: "4th Place" },
+  ];
+
+  const handleSwap = (group, index, direction) => {
+    const currentPosKey = POSITIONS[index].key;
+    const targetIndex = direction === "up" ? index - 1 : index + 1;
+
+    if (targetIndex >= 0 && targetIndex < POSITIONS.length) {
+      const targetPosKey = POSITIONS[targetIndex].key;
+      swapGroupPositions(group, currentPosKey, targetPosKey);
+    }
   };
 
   const handleQualifierToggle = (team) => {
@@ -28,6 +70,16 @@ const GroupStagePredictor = () => {
   const renderGroupCard = (group) => {
     const teams = getGroupTeams(group);
     const groupPrediction = predictions.groupStage[group] || {};
+    const selectedValues = Object.values(groupPrediction).filter(Boolean);
+
+    const isOptionDisabled = (team, currentPosition) => {
+      // Check if team is selected in any OTHER position
+      // i.e. it is in selectedValues AND it is NOT the value of the current selector
+      return (
+        selectedValues.includes(team) &&
+        team !== groupPrediction[currentPosition]
+      );
+    };
 
     return (
       <div key={group} className="group-card">
@@ -48,92 +100,51 @@ const GroupStagePredictor = () => {
         </div>
 
         <div className="position-selectors">
-          <div className="position-select">
-            <label>1st Place:</label>
-            <select
-              value={groupPrediction.first || ""}
-              onChange={(e) => handleTeamSelect(group, "first", e.target.value)}
-              className="team-select"
-            >
-              <option value="">Select team</option>
-              {teams.map((team) => (
-                <option key={team} value={team}>
-                  {team}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="position-select">
-            <label>2nd Place:</label>
-            <select
-              value={groupPrediction.second || ""}
-              onChange={(e) =>
-                handleTeamSelect(group, "second", e.target.value)
-              }
-              className="team-select"
-            >
-              <option value="">Select team</option>
-              {teams.map((team) => (
-                <option
-                  key={team}
-                  value={team}
-                  disabled={team === groupPrediction.first}
-                >
-                  {team}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="position-select">
-            <label>3rd Place:</label>
-            <select
-              value={groupPrediction.third || ""}
-              onChange={(e) => handleTeamSelect(group, "third", e.target.value)}
-              className="team-select"
-            >
-              <option value="">Select team</option>
-              {teams.map((team) => (
-                <option
-                  key={team}
-                  value={team}
-                  disabled={
-                    team === groupPrediction.first ||
-                    team === groupPrediction.second
+          {POSITIONS.map((pos, index) => (
+            <div key={pos.key} className="position-select-row">
+              <div className="position-select">
+                <label>{pos.label}:</label>
+                <select
+                  value={groupPrediction[pos.key] || ""}
+                  onChange={(e) =>
+                    handleTeamSelect(group, pos.key, e.target.value)
                   }
+                  className={`team-select ${
+                    groupPrediction[pos.key] ? "has-value" : ""
+                  }`}
                 >
-                  {team}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="position-select">
-            <label>4th Place:</label>
-            <select
-              value={groupPrediction.fourth || ""}
-              onChange={(e) =>
-                handleTeamSelect(group, "fourth", e.target.value)
-              }
-              className="team-select"
-            >
-              <option value="">Select team</option>
-              {teams.map((team) => (
-                <option
-                  key={team}
-                  value={team}
-                  disabled={
-                    team === groupPrediction.first ||
-                    team === groupPrediction.second ||
-                    team === groupPrediction.third
-                  }
+                  <option value="">Select team</option>
+                  {teams.map((team) => (
+                    <option
+                      key={team}
+                      value={team}
+                      disabled={isOptionDisabled(team, pos.key)}
+                    >
+                      {team}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="swap-buttons">
+                <button
+                  className="swap-btn"
+                  onClick={() => handleSwap(group, index, "up")}
+                  disabled={index === 0}
+                  title="Move Up"
                 >
-                  {team}
-                </option>
-              ))}
-            </select>
-          </div>
+                  ▲
+                </button>
+                <button
+                  className="swap-btn"
+                  onClick={() => handleSwap(group, index, "down")}
+                  disabled={index === POSITIONS.length - 1}
+                  title="Move Down"
+                >
+                  ▼
+                </button>
+              </div>
+            </div>
+          ))}
         </div>
 
         {groupPrediction.first && groupPrediction.second && (

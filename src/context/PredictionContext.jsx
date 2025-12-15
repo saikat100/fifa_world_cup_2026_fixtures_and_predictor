@@ -64,6 +64,27 @@ export const PredictionProvider = ({ children }) => {
     }));
   };
 
+  // Swap two positions in a group
+  const swapGroupPositions = (group, pos1, pos2) => {
+    setPredictions((prev) => {
+      const groupData = prev.groupStage[group];
+      const team1 = groupData[pos1];
+      const team2 = groupData[pos2];
+
+      return {
+        ...prev,
+        groupStage: {
+          ...prev.groupStage,
+          [group]: {
+            ...groupData,
+            [pos1]: team2,
+            [pos2]: team1,
+          },
+        },
+      };
+    });
+  };
+
   // Update third-place qualifiers
   const updateThirdPlaceQualifiers = (qualifiers) => {
     setPredictions((prev) => ({
@@ -108,6 +129,7 @@ export const PredictionProvider = ({ children }) => {
   const value = {
     predictions,
     updateGroupPrediction,
+    swapGroupPositions,
     updateThirdPlaceQualifiers,
     updateMatchPrediction,
     updateFinalPrediction,

@@ -4,6 +4,7 @@ import { matches } from "./data/matches";
 import Controls from "./components/Controls";
 import MatchTable from "./components/MatchTable";
 import PredictionView from "./components/PredictionView";
+import Footer from "./components/Footer";
 import { PredictionProvider } from "./context/PredictionContext";
 
 function App() {
@@ -145,6 +146,7 @@ function App() {
             <PredictionView />
           </div>
         )}
+        <Footer />
       </div>
     </PredictionProvider>
   );
