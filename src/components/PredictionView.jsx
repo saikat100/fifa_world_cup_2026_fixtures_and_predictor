@@ -7,6 +7,7 @@ import "./Prediction.css";
 
 const PredictionView = () => {
   const [currentStage, setCurrentStage] = useState("Group Stage");
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
   const { predictions, resetPredictions } = usePredictions();
 
   const stages = [
@@ -88,10 +89,17 @@ const PredictionView = () => {
   }, [predictions, currentStage]);
 
   const handleReset = () => {
-    if (window.confirm("Are you sure you want to reset all predictions?")) {
-      resetPredictions();
-      setCurrentStage("Group Stage");
-    }
+    setShowResetConfirm(true);
+  };
+
+  const confirmReset = () => {
+    resetPredictions();
+    setCurrentStage("Group Stage");
+    setShowResetConfirm(false);
+  };
+
+  const cancelReset = () => {
+    setShowResetConfirm(false);
   };
 
   const handleStageClick = (stage) => {
@@ -126,7 +134,11 @@ const PredictionView = () => {
             >
               {complete && <span className="check-icon">✓ </span>}
               {!unlocked && <span className="lock-icon">🔒 </span>}
-              {stage}
+              {stage === "Final" && complete && predictions.final
+                ? `🏆 Final ${predictions.final}`
+                : stage === "Third Place" && complete && predictions.thirdPlace
+                ? `🥈 Third Place ${predictions.thirdPlace}`
+                : stage}
             </button>
           );
         })}
@@ -139,6 +151,27 @@ const PredictionView = () => {
           <BracketView stage={currentStage} />
         )}
       </div>
+
+      {/* Custom Reset Confirmation Modal */}
+      {showResetConfirm && (
+        <div className="modal-overlay" onClick={cancelReset}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <h3>Reset All Predictions?</h3>
+            <p>
+              Are you sure you want to reset all predictions? This action cannot
+              be undone.
+            </p>
+            <div className="modal-actions">
+              <button className="modal-btn cancel-btn" onClick={cancelReset}>
+                Cancel
+              </button>
+              <button className="modal-btn confirm-btn" onClick={confirmReset}>
+                Reset All
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

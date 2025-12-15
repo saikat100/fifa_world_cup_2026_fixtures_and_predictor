@@ -62,7 +62,11 @@ const BracketView = ({ stage }) => {
       <div className="stage-header">
         <h2>{stage}</h2>
         <p className="stage-description">
-          Select the winner for each match to advance to the next round.
+          {stage === "Final"
+            ? "Select the World Cup champion!"
+            : stage === "Third Place"
+            ? "Select the third-place winner."
+            : "Select the winner for each match to advance to the next round."}
         </p>
       </div>
 
