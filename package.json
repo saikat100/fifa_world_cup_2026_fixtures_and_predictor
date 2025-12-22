@@ -1,7 +1,7 @@
 {
   "name": "fifa_world_cup_2026_fixtures_and_predictor",
   "private": true,
-  "version": "2.0.0",
+  "version": "2.0.1",
   "type": "module",
   "scripts": {
     "dev": "vite",

@@ -235,60 +235,62 @@ const PredictionView = () => {
           </div>
         </div>
       )}
-      <div className="champion-history">
-        <h2>
-          Champion Predictions (Total Participants:{" "}
-          {championHistory.reduce(
-            (sum, item) => sum + item["Number of win"],
-            0
-          )}
-          )
-        </h2>
-        <div className="history-list">
-          {(() => {
-            const totalPredictions = championHistory.reduce(
+      {predictions.final && (
+        <div className="champion-history">
+          <h2>
+            Champion Predictions (Total Participants:{" "}
+            {championHistory.reduce(
               (sum, item) => sum + item["Number of win"],
               0
-            );
+            )}
+            )
+          </h2>
+          <div className="history-list">
+            {(() => {
+              const totalPredictions = championHistory.reduce(
+                (sum, item) => sum + item["Number of win"],
+                0
+              );
 
-            return championHistory
-              .filter((team) => team["Number of win"] > 0)
-              .sort((a, b) => b["Number of win"] - a["Number of win"])
-              .map((team) => {
-                const percentage =
-                  totalPredictions > 0
-                    ? (
-                        (team["Number of win"] / totalPredictions) *
-                        100
-                      ).toFixed(1)
-                    : 0;
-                return (
-                  <div key={team["Team Name"]} className="history-item-bar">
-                    <div
-                      className="bar-fill"
-                      style={{ width: `${percentage}%` }}
-                    ></div>
-                    <div className="bar-content">
-                      <div className="bar-left">
-                        {getFlagUrl(team["Team Name"]) && (
-                          <img
-                            src={getFlagUrl(team["Team Name"])}
-                            alt={team["Team Name"]}
-                            className="history-flag"
-                          />
-                        )}
-                        <span className="team-name">{team["Team Name"]}</span>
-                      </div>
-                      <div className="bar-right">
-                        <span className="percentage">{percentage}%</span>
+              return championHistory
+                .filter((team) => team["Number of win"] > 0)
+                .sort((a, b) => b["Number of win"] - a["Number of win"])
+                .map((team) => {
+                  const percentage =
+                    totalPredictions > 0
+                      ? (
+                          (team["Number of win"] / totalPredictions) *
+                          100
+                        ).toFixed(1)
+                      : 0;
+                  return (
+                    <div key={team["Team Name"]} className="history-item-bar">
+                      <div
+                        className="bar-fill"
+                        style={{ width: `${percentage}%` }}
+                      ></div>
+                      <div className="bar-content">
+                        <div className="bar-left">
+                          {getFlagUrl(team["Team Name"]) && (
+                            <img
+                              src={getFlagUrl(team["Team Name"])}
+                              alt={team["Team Name"]}
+                              className="history-flag"
+                            />
+                          )}
+                          <span className="team-name">{team["Team Name"]}</span>
+                        </div>
+                        <div className="bar-right">
+                          <span className="percentage">{percentage}%</span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                );
-              });
-          })()}
+                  );
+                });
+            })()}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
