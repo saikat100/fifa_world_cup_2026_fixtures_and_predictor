@@ -55,19 +55,36 @@ const championUpdater = () => ({
               data[teamIndex]["Number of win"] = newCount;
               console.log(`New count for ${team}: ${newCount}`);
 
-              // Write back to Excel
-              const newWorksheet = xlsx.utils.json_to_sheet(data);
-              workbook.Sheets[sheetName] = newWorksheet;
-              xlsx.writeFile(workbook, filePath);
+              // Update the JSON cache FIRST so the frontend works immediately
+              try {
+                fs.writeFileSync(jsonPath, JSON.stringify(data, null, 2));
+                console.log("JSON cache updated successfully");
+              } catch (jsonErr) {
+                console.error("Failed to update JSON cache:", jsonErr);
+                // If JSON fails, we probably shouldn't proceed, or we should report it.
+                throw jsonErr;
+              }
 
-              // Also update the JSON cache so the frontend sees it on reload
-              fs.writeFileSync(jsonPath, JSON.stringify(data, null, 2));
+              // Try to write back to Excel, but don't crash if locked
+              try {
+                const newWorksheet = xlsx.utils.json_to_sheet(data);
+                workbook.Sheets[sheetName] = newWorksheet;
+                xlsx.writeFile(workbook, filePath);
+                console.log("Excel file updated successfully");
+              } catch (excelErr) {
+                console.warn(
+                  "Warning: Failed to update Excel file (maybe it's open?). JSON was updated."
+                );
+                console.error(excelErr.message);
+                // We proceed since JSON was updated
+              }
 
               res.setHeader("Content-Type", "application/json");
               res.end(
                 JSON.stringify({
                   success: true,
                   newCount: newCount,
+                  warning: "Excel file might be locked, but data saved.",
                 })
               );
             } else {

@@ -6,6 +6,7 @@ import BracketView from "./BracketView";
 import winGif from "../assets/win.gif";
 import trophyImg from "../assets/worldCup.png";
 import championHistory from "../data/championHistory.json";
+import { getFlagUrl } from "../utils/flags";
 import "./Prediction.css";
 
 const PredictionView = () => {
@@ -39,14 +40,6 @@ const PredictionView = () => {
         .catch((err) => console.error("Failed to update champion count:", err));
     }
   }, [predictions.final]);
-
-  const getChampionWins = (teamName) => {
-    const history = championHistory.find(
-      (item) => item["Team Name"] === teamName
-    );
-    const existingWins = history ? history["Number of win"] : 0;
-    return existingWins + 1;
-  };
 
   const stages = [
     "Group Stage",
@@ -224,9 +217,6 @@ const PredictionView = () => {
           >
             <h2 className="champion-title">🏆 Champion!</h2>
             <div className="champion-team">{predictions.final}</div>
-            <div className="champion-wins">
-              Number of wins: {getChampionWins(predictions.final)}
-            </div>
             <div className="champion-media">
               <img src={winGif} alt="Celebration" className="champion-gif" />
               {/* <img
@@ -245,6 +235,60 @@ const PredictionView = () => {
           </div>
         </div>
       )}
+      <div className="champion-history">
+        <h2>
+          Champion Predictions (Total Participants:{" "}
+          {championHistory.reduce(
+            (sum, item) => sum + item["Number of win"],
+            0
+          )}
+          )
+        </h2>
+        <div className="history-list">
+          {(() => {
+            const totalPredictions = championHistory.reduce(
+              (sum, item) => sum + item["Number of win"],
+              0
+            );
+
+            return championHistory
+              .filter((team) => team["Number of win"] > 0)
+              .sort((a, b) => b["Number of win"] - a["Number of win"])
+              .map((team) => {
+                const percentage =
+                  totalPredictions > 0
+                    ? (
+                        (team["Number of win"] / totalPredictions) *
+                        100
+                      ).toFixed(1)
+                    : 0;
+                return (
+                  <div key={team["Team Name"]} className="history-item-bar">
+                    <div
+                      className="bar-fill"
+                      style={{ width: `${percentage}%` }}
+                    ></div>
+                    <div className="bar-content">
+                      <div className="bar-left">
+                        {getFlagUrl(team["Team Name"]) && (
+                          <img
+                            src={getFlagUrl(team["Team Name"])}
+                            alt={team["Team Name"]}
+                            className="history-flag"
+                          />
+                        )}
+                        <span className="team-name">{team["Team Name"]}</span>
+                      </div>
+                      <div className="bar-right">
+                        <span className="percentage">{percentage}%</span>
+                      </div>
+                    </div>
+                  </div>
+                );
+              });
+          })()}
+        </div>
+      </div>
     </div>
   );
 };
