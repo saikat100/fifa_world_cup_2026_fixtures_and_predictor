@@ -457,29 +457,34 @@
 
 @media (max-width: 600px) {
   /* Grids */
-  .groups-grid {
+  .groups-grid,
+  .matches-grid,
+  .qualifier-grid {
     grid-template-columns: 1fr; /* Full width cards */
-  }
-
-  .matches-grid {
-    grid-template-columns: 1fr;
+    gap: 12px;
   }
 
   .group-card,
   .match-predictor {
     padding: 12px;
   }
-
-  /* Team Items */
-  .team-item {
-    font-size: 14px;
-    padding: 4px 0;
+  
+  /* Navigation */
+  .stage-navigation {
+    padding-bottom: 4px;
+    margin-bottom: 16px;
+    gap: 6px;
   }
 
-  /* Stage Tabs */
   .stage-tab {
     padding: 8px 12px;
     font-size: 13px;
+  }
+
+  /* Team Items */
+  .team-item {
+    font-size: 13px;
+    padding: 6px 0;
   }
 
   .stage-header h2 {
@@ -487,31 +492,62 @@
   }
 
   /* Position Selectors */
+  .position-select-row {
+     gap: 6px;
+  }
+  
+  .position-select {
+    flex-wrap: wrap; /* Allow wrapping if needed */
+  }
+
   .position-select label {
-    min-width: 60px; /* Reduce label width */
+    min-width: 50px; /* Reduce label width */
     font-size: 12px;
   }
 
   .team-select {
     font-size: 12px;
-    padding: 6px 4px;
+    padding: 8px 6px; /* Larger touch target */
   }
 
   /* Champion Modal Mobile */
+  .modal-content {
+      width: 95%;
+      padding: 20px;
+      margin: 10px;
+  }
+
   .champion-title {
     font-size: 24px !important;
   }
 
   .champion-team {
-    font-size: 28px;
+    font-size: 24px; /* Reduced to fit screen */
+    word-break: break-word; /* Prevent overflow */
   }
 
-  .champion-gif {
-    max-height: 150px;
+  /* Champion History Mobile */
+  .champion-history {
+    padding: 16px;
+    margin-top: 32px;
+  }
+  
+  .history-item-bar {
+    height: 40px; /* Smaller bars */
   }
 
-  .champion-trophy {
-    height: 80px;
+  .history-item-bar .team-name {
+    font-size: 13px;
+  }
+  
+  .history-flag {
+    width: 20px;
+    height: 15px;
+  }
+
+  .history-item-bar .percentage {
+    font-size: 12px;
+    min-width: 35px;
   }
 }
 
