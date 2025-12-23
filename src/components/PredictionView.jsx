@@ -5,7 +5,6 @@ import GroupStagePredictor from "./GroupStagePredictor";
 import BracketView from "./BracketView";
 import winGif from "../assets/win.gif";
 import trophyImg from "../assets/worldCup.png";
-import championHistory from "../data/championHistory.json";
 import { getFlagUrl } from "../utils/flags";
 import "./Prediction.css";
 
@@ -13,8 +12,28 @@ const PredictionView = () => {
   const [currentStage, setCurrentStage] = useState("Group Stage");
   const [showResetConfirm, setShowResetConfirm] = useState(false);
   const [showChampionModal, setShowChampionModal] = useState(false);
+  const [championHistoryData, setChampionHistoryData] = useState([]);
   const isFirstMount = useRef(true);
   const { predictions, resetPredictions } = usePredictions();
+
+  const GOOGLE_SCRIPT_URL =
+    "https://script.google.com/macros/s/AKfycbx482wNxCV1OX4oEDneNsdh_5OVhLs7XDoqPFz5jWr4usaEeAMyJAc7g1Kfp6Zm1oALug/exec";
+
+  // Fetch champion history on mount
+  useEffect(() => {
+    fetch(GOOGLE_SCRIPT_URL)
+      .then((res) => res.json())
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setChampionHistoryData(data);
+        } else {
+          console.error("Invalid data format from Google Sheets:", data);
+          // Fallback to local data if API fails?
+          // For now, let's stick to API or empty to avoid confusion.
+        }
+      })
+      .catch((err) => console.error("Failed to fetch champion history:", err));
+  }, []);
 
   // Watch for champion selection
   useEffect(() => {
@@ -25,16 +44,29 @@ const PredictionView = () => {
     if (predictions.final) {
       setShowChampionModal(true);
 
-      // Update the Excel file via our custom Vite middleware
-      fetch("/api/update-champion", {
+      // Update the Google Sheet
+      // Google Apps Script requires no-cors for simple posts usually, or specific headers.
+      // However, standard fetch with CORS enabled on the script side (which we did by returning JSON) should work.
+      // But standard POSTs to GAS often need to be text/plain or specific to avoid preflight issues if logic isn't perfect.
+      // We'll try standard JSON POST first since we handled OPTIONS/CORS in the script (implicitly via Web App default behavior usually handling specific types).
+      // Actually, standard fetch POST to GAS often triggers CORS issues unless content-type is text/plain.
+      // Let's use text/plain and parse it in the script (which the script I gave supports).
+
+      fetch(GOOGLE_SCRIPT_URL, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ team: predictions.final }),
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8",
+        },
+        body: JSON.stringify({ team: predictions.final, action: "increment" }),
       })
         .then((res) => res.json())
         .then((data) => {
           if (data.success) {
             console.log("Champion count updated:", data.newCount);
+            // Refresh history
+            fetch(GOOGLE_SCRIPT_URL)
+              .then((res) => res.json())
+              .then((history) => setChampionHistoryData(history));
           }
         })
         .catch((err) => console.error("Failed to update champion count:", err));
@@ -239,20 +271,20 @@ const PredictionView = () => {
         <div className="champion-history">
           <h2>
             Champion Predictions (Total Participants:{" "}
-            {championHistory.reduce(
-              (sum, item) => sum + item["Number of win"],
+            {championHistoryData.reduce(
+              (sum, item) => sum + (parseInt(item["Number of win"]) || 0),
               0
             )}
             )
           </h2>
           <div className="history-list">
             {(() => {
-              const totalPredictions = championHistory.reduce(
-                (sum, item) => sum + item["Number of win"],
+              const totalPredictions = championHistoryData.reduce(
+                (sum, item) => sum + (parseInt(item["Number of win"]) || 0),
                 0
               );
 
-              return championHistory
+              return championHistoryData
                 .filter((team) => team["Number of win"] > 0)
                 .sort((a, b) => b["Number of win"] - a["Number of win"])
                 .map((team) => {
