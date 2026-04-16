@@ -43,6 +43,12 @@ export const getCountryCode = (teamName) => {
     Panama: "PA",
     Uzbekistan: "UZ",
     Colombia: "CO",
+    "Czech Republic": "CZ",
+    "Bosnia and Herzegovina": "BA",
+    Sweden: "SE",
+    Iraq: "IQ",
+    "D R Congo": "CD",
+    Turkey: "TR",
   };
 
   return countryMap[teamName] || null;
