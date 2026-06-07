@@ -810,21 +810,50 @@
   .stage-header h2 {
     font-size: 18px;
   }
+
+  /* position selector — prevent label from forcing overflow */
+  .position-select-row {
+    gap: 4px;
+  }
+  .position-select {
+    gap: 6px;
+    min-width: 0;
+  }
   .position-select label {
-    min-width: 50px;
+    min-width: 58px;
+    max-width: 58px;
     font-size: 10px;
+    letter-spacing: 0;
+    flex-shrink: 0;
   }
   .team-select {
-    font-size: 12px;
-    padding: 7px 8px;
+    font-size: 13px;
+    padding: 8px 6px;
+    min-width: 0;
+    flex: 1 1 0;
   }
+  .swap-btn {
+    width: 22px;
+    height: 15px;
+    font-size: 7px;
+  }
+
   .prediction-header h1 {
     font-size: 20px;
+  }
+  .reset-btn {
+    font-size: 13px;
+    padding: 9px 16px;
   }
   .third-place-qualifiers {
     padding: 16px;
     margin-top: 28px;
   }
+  .qualifier-button {
+    padding: 10px 12px;
+  }
+
+  /* champion */
   .champion-title {
     font-size: 22px !important;
   }
@@ -850,8 +879,38 @@
     font-size: 13px;
     min-width: 36px;
   }
+
+  /* modal */
+  .modal-overlay {
+    padding: 12px;
+  }
   .modal-content {
     padding: 20px;
     border-radius: 16px;
+  }
+
+  /* match predictor */
+  .team-button {
+    padding: 11px 12px;
+  }
+  .team-name {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 400px) {
+  .stage-tab {
+    padding: 7px 11px;
+    font-size: 11px;
+  }
+  .group-card,
+  .match-predictor,
+  .third-place-qualifiers {
+    padding: 12px;
+  }
+  .position-select label {
+    min-width: 52px;
+    max-width: 52px;
+    font-size: 9px;
   }
 }
