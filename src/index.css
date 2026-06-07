@@ -1,15 +1,33 @@
 :root {
-  --bg: #0f172a;
-  --card: #0b1220;
-  --muted: #94a3b8;
-  --accent: #06b6d4;
-  --glass: rgba(255, 255, 255, 0.03);
-  font-family: Inter, system-ui, Segoe UI, Roboto, 'Helvetica Neue', Arial;
+  --primary: #2563eb;
+  --primary-light: #3b82f6;
+  --primary-50: #eff6ff;
+  --accent: #0891b2;
+  --accent-50: #ecfeff;
+  --bg: #f1f5f9;
+  --surface: #ffffff;
+  --border: #e2e8f0;
+  --border-light: #f8fafc;
+  --text: #0f172a;
+  --text-secondary: #334155;
+  --muted: #64748b;
+  --success: #059669;
+  --success-50: #ecfdf5;
+  --danger: #dc2626;
+  --warning: #d97706;
+  --glass: rgba(0, 0, 0, 0.03);
+  --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-md: 0 4px 16px rgba(15, 23, 42, 0.08), 0 2px 4px rgba(15, 23, 42, 0.04);
+  --shadow-lg: 0 16px 40px rgba(15, 23, 42, 0.12), 0 4px 8px rgba(15, 23, 42, 0.06);
+  font-family: Inter, system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
 body {
   margin: 0;
-  background: linear-gradient(180deg, #071127 0%, #08111b 100%);
-  color: #e6eef6;
-  padding: 24px;
+  background: var(--bg);
+  color: var(--text);
+  padding: 0;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }

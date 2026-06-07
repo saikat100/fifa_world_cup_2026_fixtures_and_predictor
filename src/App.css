@@ -1,59 +1,101 @@
+/* ── App Shell ── */
 .app-container {
   width: 100%;
-}
-
-.view-tabs {
+  min-height: 100vh;
   display: flex;
-  gap: 12px;
-  margin-bottom: 24px;
-  padding: 0 24px;
-  padding-top: 24px;
+  flex-direction: column;
 }
 
-.view-tab {
-  background: var(--glass);
-  border: 1px solid rgba(255, 255, 255, 0.04);
-  color: var(--muted);
-  padding: 12px 24px;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 16px;
-  font-weight: 500;
-  transition: all 0.2s;
+/* ── Navigation Bar ── */
+.view-tabs {
+  background: linear-gradient(135deg, #0c1f3d 0%, #1a3a6c 60%, #0e3460 100%);
   display: flex;
   align-items: center;
   gap: 8px;
+  padding: 16px 32px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.22);
+}
+
+.view-tabs::before {
+  content: "⚽ FIFA World Cup 2026";
+  font-size: 17px;
+  font-weight: 800;
+  color: white;
+  letter-spacing: -0.3px;
+  margin-right: auto;
+  white-space: nowrap;
+}
+
+.view-tab {
+  background: transparent;
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  color: rgba(255, 255, 255, 0.7);
+  padding: 9px 20px;
+  border-radius: 9999px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  font-family: inherit;
 }
 
 .view-tab:hover {
-  border-color: var(--accent);
-  color: #e6eef6;
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.5);
+  color: white;
 }
 
 .view-tab.active {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: #0f172a;
+  background: white;
+  border-color: white;
+  color: #0c1f3d;
+  font-weight: 700;
+  box-shadow: 0 2px 16px rgba(255, 255, 255, 0.2);
 }
 
+/* ── Page Container ── */
 .container {
   max-width: 1200px;
   margin: 0 auto;
+  padding: 32px 24px 56px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
+/* ── Schedule Page Header ── */
 .header {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 18px;
+  gap: 24px;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
 }
 
 h1 {
-  font-size: 20px;
-  margin: 0;
+  font-size: 26px;
+  font-weight: 800;
+  margin: 0 0 6px 0;
+  color: var(--text);
+  letter-spacing: -0.5px;
+  line-height: 1.25;
 }
 
+.small {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+/* ── Controls ── */
 .controls {
   display: flex;
   gap: 8px;
@@ -61,30 +103,67 @@ h1 {
   align-items: center;
 }
 
-.select,
-.input,
-.btn {
-  background: var(--glass);
-  border: 1px solid rgba(255, 255, 255, 0.04);
-  padding: 8px 10px;
-  border-radius: 10px;
-  color: var(--muted);
-}
-
 .input {
+  background: white;
+  border: 1.5px solid var(--border);
+  padding: 9px 16px;
+  border-radius: 9999px;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 500;
   min-width: 200px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  font-family: inherit;
+}
+
+.select {
+  background: white;
+  border: 1.5px solid var(--border);
+  padding: 9px 14px;
+  border-radius: 12px;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.input:focus,
+.select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
 }
 
 .btn {
+  background: white;
+  border: 1.5px solid var(--border);
+  padding: 9px 18px;
+  border-radius: 9999px;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 600;
   cursor: pointer;
-  color: #e6eef6;
+  transition: all 0.2s;
+  font-family: inherit;
+  white-space: nowrap;
 }
 
+.btn:hover {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: white;
+  box-shadow: 0 2px 10px rgba(37, 99, 235, 0.3);
+}
+
+/* ── Table ── */
 .table-wrap {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
-  padding: 12px;
-  border-radius: 12px;
-  box-shadow: 0 6px 18px rgba(2, 6, 23, 0.6);
+  background: white;
+  border-radius: 16px;
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
 }
@@ -92,131 +171,136 @@ h1 {
 table {
   width: 100%;
   border-collapse: collapse;
-  table-layout: auto; 
+  table-layout: auto;
   min-width: 800px;
 }
 
-th,
-td {
-  padding: 10px 8px;
+th {
+  padding: 13px 14px;
   text-align: left;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+  color: var(--muted);
+  background: var(--border-light);
+  border-bottom: 2px solid var(--border);
+  cursor: pointer;
+  white-space: nowrap;
+  user-select: none;
+  position: sticky;
+  top: 0;
+  transition: color 0.15s, background 0.15s;
+}
+
+th:hover {
+  color: var(--primary);
+  background: var(--primary-50);
+}
+
+td {
+  padding: 12px 14px;
   font-size: 13px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid var(--border-light);
+  color: var(--text-secondary);
   white-space: nowrap;
 }
 
-th {
-  position: sticky;
-  top: 0;
-  background: rgba(6, 8, 16, 0.6);
-  backdrop-filter: blur(4px);
-  cursor: pointer;
+tbody tr:hover td {
+  background: var(--border-light);
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
 }
 
 th.sort-asc::after {
   content: " ▲";
-  font-size: 11px;
-  color: var(--accent);
+  font-size: 10px;
+  color: var(--primary);
 }
 
 th.sort-desc::after {
   content: " ▼";
-  font-size: 11px;
-  color: var(--accent);
+  font-size: 10px;
+  color: var(--primary);
 }
 
-.small {
-  font-size: 12px;
-  color: var(--muted);
-}
-
+/* ── Team Cell ── */
 .team-cell {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
+.team-cell span {
+  font-weight: 600;
+  color: var(--text);
+}
+
 .flag-icon {
-  width: 20px;
-  height: 15px;
+  width: 22px;
+  height: 16px;
   object-fit: cover;
-  border-radius: 2px;
+  border-radius: 3px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
   flex-shrink: 0;
 }
 
-@media (max-width: 800px) {
-  th,
-  td {
-    font-size: 12px;
-    padding: 8px;
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .view-tabs {
+    padding: 14px 20px;
   }
-  .input {
-    min-width: 120px;
+  .view-tabs::before {
+    font-size: 15px;
   }
   .header {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
   }
 }
 
 @media (max-width: 600px) {
-  body {
-    padding: 12px 8px;
-  }
-
-  .container {
-    padding: 0;
-    width: 100%;
-  }
-  
   .view-tabs {
-    padding: 8px 4px;
-    gap: 8px;
-    overflow-x: auto;
-    white-space: nowrap;
-    -webkit-overflow-scrolling: touch;
-    margin-bottom: 16px;
-    justify-content: flex-start;
+    padding: 12px 16px;
+    gap: 6px;
   }
-
-  .view-tab {
-    padding: 10px 14px;
+  .view-tabs::before {
     font-size: 13px;
-    flex-shrink: 0;
   }
-
+  .view-tab {
+    padding: 8px 14px;
+    font-size: 13px;
+  }
+  .container {
+    padding: 20px 16px 40px;
+  }
   h1 {
-    font-size: 18px; /* Smaller header */
+    font-size: 20px;
   }
-
-  .header {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 16px;
-  }
-
   .controls {
-    width: 100%;
     flex-direction: column;
     align-items: stretch;
-    gap: 12px;
+    width: 100%;
   }
-
-  .input, .select, .btn {
+  .input,
+  .select,
+  .btn {
     width: 100%;
     box-sizing: border-box;
-    font-size: 14px; /* Readable input size */
-    padding: 10px; /* larger tap targets */
+    border-radius: 12px;
   }
-
-  /* Table Adjustments */
-  th, td {
-    padding: 8px 4px;
+  th {
+    font-size: 10px;
+    padding: 10px 10px;
+  }
+  td {
+    padding: 10px 10px;
     font-size: 11px;
   }
-
   .flag-icon {
-    width: 16px;
-    height: 12px;
+    width: 18px;
+    height: 13px;
   }
 }
